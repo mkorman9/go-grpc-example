@@ -23,7 +23,6 @@ go install github.com/golang/protobuf/protoc-gen-go@latest
 
 Build binary:
 ```
-make generate
 make 
 ```
 
