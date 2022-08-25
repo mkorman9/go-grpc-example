@@ -14,3 +14,15 @@ message HelloRequest {
 message HelloReply {
   string message = 1;
 }
+
+service GameService {
+  rpc Play (stream PlayerRequest) returns (stream ServerResponse) {}
+}
+
+message PlayerRequest {
+  string message = 1;
+}
+
+message ServerResponse {
+  string message = 1;
+}
