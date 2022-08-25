@@ -11,4 +11,4 @@ build:
 test:
 	go test -v ./...
 
-all: build test
+all: generate build test
