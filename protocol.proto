@@ -2,6 +2,7 @@ syntax = "proto3";
 package protocol;
 
 option go_package = "./protocol";
+option csharp_namespace = "Protocol";
 
 service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
