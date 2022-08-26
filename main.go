@@ -8,7 +8,6 @@ import (
 	"github.com/mkorman9/go-commons/lifecycle"
 	"github.com/mkorman9/go-commons/logutil"
 	"github.com/mkorman9/go-grpc-example/protocol"
-	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"strings"
@@ -44,8 +43,7 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 	for {
 		request, err := stream.Recv()
 		if err != nil {
-			log.Error().Err(err).Msg("Error while receiving player request")
-			return status.Errorf(codes.Internal, "internal server error")
+			return status.Errorf(codes.Canceled, "call cancelled")
 		}
 
 		if strings.EqualFold(request.Message, "exit") {
