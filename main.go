@@ -60,7 +60,7 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 	return nil
 }
 
-func authFunction(token string) (*grpcutil.TokenVerificationResult, error) {
+func authFunction(token string, _ *grpcutil.CallMetadata) (*grpcutil.TokenVerificationResult, error) {
 	return &grpcutil.TokenVerificationResult{
 		IsAuthorized: token == correctToken,
 	}, nil
