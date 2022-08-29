@@ -70,7 +70,7 @@ func main() {
 	configutil.LoadConfig()
 	logutil.SetupLogger()
 
-	server := grpcutil.NewServer(grpcutil.EnableAuthMiddleware(authFunction))
+	server := grpcutil.NewServer(grpcutil.EnableAuthMiddlewareFunc(authFunction))
 	protocol.RegisterGreeterServer(server.Server, &GreeterService{})
 	protocol.RegisterGameServiceServer(server.Server, &GameService{})
 
