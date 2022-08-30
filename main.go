@@ -8,6 +8,7 @@ import (
 	"github.com/mkorman9/go-commons/lifecycle"
 	"github.com/mkorman9/go-commons/logutil"
 	"github.com/mkorman9/go-grpc-example/protocol"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -47,6 +48,10 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 				Message: request.Message,
 			})
 		}
+	})
+
+	ds.OnEnd(func(_ error) {
+		log.Info().Msg("Connection closed")
 	})
 
 	return ds.Start()
