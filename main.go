@@ -10,7 +10,6 @@ import (
 	"github.com/mkorman9/go-grpc-example/protocol"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"strings"
 )
 
 const correctToken = "secret"
@@ -38,26 +37,19 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 		return status.Error(codes.Unauthenticated, "invalid token")
 	}
 
-	for {
-		request, err := stream.Recv()
-		if err != nil {
-			return status.Errorf(codes.Canceled, "call cancelled")
-		}
+	ds := grpcutil.NewDuplexStream[protocol.PlayerRequest, protocol.ServerResponse](stream)
 
-		if strings.EqualFold(request.Message, "exit") {
-			_ = stream.Send(&protocol.ServerResponse{
-				Message: "SERVERMSG: Closing",
+	ds.OnReceive(func(request *protocol.PlayerRequest) {
+		if request.Message == "exit" {
+			ds.Stop()
+		} else {
+			ds.Send(&protocol.ServerResponse{
+				Message: request.Message,
 			})
-
-			break
 		}
+	})
 
-		_ = stream.Send(&protocol.ServerResponse{
-			Message: fmt.Sprintf("SERVERMSG: Received %s", request.Message),
-		})
-	}
-
-	return nil
+	return ds.Start()
 }
 
 func authFunction(token string, _ *grpcutil.CallMetadata) (*grpcutil.TokenVerificationResult, error) {
