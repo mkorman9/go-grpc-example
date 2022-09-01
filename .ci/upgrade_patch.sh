@@ -11,4 +11,4 @@ if [[ -z "$major" || -z "$minor" || -z "$patch" ]]; then
   exit 1
 fi
 
-echo "${major}.${minor}.$(($patch + 1))"
+echo "v${major}.${minor}.$(($patch + 1))"
