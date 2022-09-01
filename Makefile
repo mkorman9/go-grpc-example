@@ -1,5 +1,5 @@
 OUTPUT ?= go-grpc-example
-VERSION := $(shell .build/get_version.sh)
+VERSION := $(shell bash .build/get_version.sh)
 
 .DEFAULT_GOAL := all
 
