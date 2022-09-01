@@ -17,9 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: debug
-        run: git --no-pager branch
-
       - name: Install Protobuf compiler
         run: sudo apt install -y protobuf-compiler
 
