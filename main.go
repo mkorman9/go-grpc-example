@@ -13,6 +13,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+var AppVersion = "dev"
+
 const correctToken = "secret"
 
 type GreeterService struct {
@@ -24,7 +26,7 @@ func (gs *GreeterService) SayHello(ctx context.Context, request *protocol.HelloR
 	}
 
 	response := &protocol.HelloReply{
-		Message: fmt.Sprintf("Hello %s", request.Name),
+		Message: fmt.Sprintf("Hello %s from version %s", request.Name, AppVersion),
 	}
 
 	return response, nil
