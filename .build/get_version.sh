@@ -17,7 +17,7 @@ if [[ -z "$last_version" ]]; then
   last_version="v0.0.0"
 fi
 
-version="$($current_dir/upgrade_patch.sh $last_version)"
+version="$("${current_dir}/upgrade_patch.sh" $last_version)"
 
 if [[ "$branch_name" != "master" ]]; then
   version="${version}-${branch_name}"

@@ -12,4 +12,7 @@ build:
 test:
 	go test -v ./...
 
+get-version:
+	@echo $(VERSION)
+
 all: generate build test
