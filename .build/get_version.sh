@@ -13,7 +13,8 @@ fi
 
 last_version="$(git tag --sort=-v:refname | head -1)"
 
-echo "--- $last_version"
+echo "--- $commit_id" 1>&2
+echo "--- $branch_name" 1>&2
 
 if [[ -z "$last_version" ]]; then
   last_version="v0.0.0"
