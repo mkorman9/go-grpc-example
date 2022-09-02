@@ -3,9 +3,9 @@ name: Pipeline
 on:
   push:
     branches:
-      - "*"
+      - '**'
     tags:
-      - "*"
+      - v*
 
 permissions:
   contents: read
