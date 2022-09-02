@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/mkorman9/go-commons/configutil"
+	"github.com/mkorman9/go-commons/eventbus"
 	"github.com/mkorman9/go-commons/grpcutil"
 	"github.com/mkorman9/go-commons/lifecycle"
 	"github.com/mkorman9/go-commons/logutil"
@@ -11,6 +12,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"time"
 )
 
 var AppVersion = "dev"
@@ -56,6 +58,13 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 		log.Info().Msg("Connection closed")
 	})
 
+	cancel := eventbus.Consume("server.events", func(msg *string, ctx eventbus.CallContext) {
+		ds.Send(&protocol.ServerResponse{
+			Message: *msg,
+		})
+	})
+	defer cancel()
+
 	return ds.Start()
 }
 
@@ -69,9 +78,26 @@ func main() {
 	configutil.LoadConfig()
 	logutil.SetupLogger()
 
+	runScheduledEvents()
+
 	server := grpcutil.NewServer(grpcutil.EnableAuthMiddlewareFunc(authFunction))
 	protocol.RegisterGreeterServer(server.Server, &GreeterService{})
 	protocol.RegisterGameServiceServer(server.Server, &GameService{})
 
 	lifecycle.StartAndBlock(server)
+}
+
+func runScheduledEvents() {
+	go func() {
+		for {
+			scheduledEvent := "Scheduled event"
+
+			eventbus.Publish(
+				"server.events",
+				&scheduledEvent,
+			)
+
+			time.Sleep(5 * time.Second)
+		}
+	}()
 }
