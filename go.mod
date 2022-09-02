@@ -3,7 +3,7 @@ module github.com/mkorman9/go-grpc-example
 go 1.18
 
 require (
-	github.com/mkorman9/go-commons v1.0.56
+	github.com/mkorman9/go-commons v1.0.57
 	google.golang.org/grpc v1.47.0
 	google.golang.org/protobuf v1.28.0
 )

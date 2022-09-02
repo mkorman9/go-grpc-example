@@ -92,6 +92,8 @@ github.com/mkorman9/go-commons v1.0.55 h1:CSo3R4IfvLsynFrqxOlUnQUVIPiAEXfgmvaU0Y
 github.com/mkorman9/go-commons v1.0.55/go.mod h1:XY9NwabHUelcVQpBUHksgv+/4BTlBaH6Ipy7zieXm/g=
 github.com/mkorman9/go-commons v1.0.56 h1:FefmK1efiAzcmFKqwJGq+8yF6MgVdac/2DWZ20Qodxo=
 github.com/mkorman9/go-commons v1.0.56/go.mod h1:XY9NwabHUelcVQpBUHksgv+/4BTlBaH6Ipy7zieXm/g=
+github.com/mkorman9/go-commons v1.0.57 h1:f1CcxtNnNTM6M2nAXCm7vFvUi8ptFgPaMNS7SWExf/E=
+github.com/mkorman9/go-commons v1.0.57/go.mod h1:XY9NwabHUelcVQpBUHksgv+/4BTlBaH6Ipy7zieXm/g=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
