@@ -58,7 +58,7 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 		log.Info().Msg("Connection closed")
 	})
 
-	cancel := eventbus.Consume("server.events", func(msg *string, ctx eventbus.CallContext) {
+	cancel := eventbus.Consume("server.events", func(msg *string, _ eventbus.CallContext) {
 		ds.Send(&protocol.ServerResponse{
 			Message: *msg,
 		})
