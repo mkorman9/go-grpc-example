@@ -50,7 +50,7 @@ jobs:
       - name: Retrieve version
         id: version
         run: |
-          echo "::set-output name=TAG_NAME::$(bash .build/get_version.sh)')"
+          echo "::set-output name=TAG_NAME::$(bash .build/get_version.sh)"
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
