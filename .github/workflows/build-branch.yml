@@ -1,17 +1,9 @@
-name: Pipeline
+name: Build Branch
 
 on:
   push:
     branches:
       - '**'
-
-  workflow_run:
-    workflows:
-      - Release Patch
-      - Release Minor
-      - Release Major
-    types:
-      - completed
 
 permissions:
   contents: read
@@ -45,12 +37,3 @@ jobs:
 #        with:
 #          name: linux-amd64
 #          path: go-grpc-example
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            go-grpc-example
-            LICENSE.txt
-          draft: true
-        if: startsWith(github.ref, 'refs/tags/')

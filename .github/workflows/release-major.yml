@@ -22,3 +22,35 @@ jobs:
           git config --global user.name "Github Actions"
           git config --global user.email 'github-actions@github.com'
           bash .build/release_major.sh
+
+  build:
+    runs-on: ubuntu-latest
+    needs: release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Protobuf compiler
+        run: sudo apt install -y protobuf-compiler
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Install protoc-gen-go
+        run: go install github.com/golang/protobuf/protoc-gen-go@latest
+
+      - name: Build
+        run: make
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            go-grpc-example
+            LICENSE.txt
+          draft: true
