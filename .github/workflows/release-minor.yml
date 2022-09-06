@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  id-token: write
   contents: write
   packages: write
 
@@ -33,6 +34,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v1
+
       - name: Install Protobuf compiler
         run: sudo apt install -y protobuf-compiler
 
@@ -46,6 +50,26 @@ jobs:
 
       - name: Build
         run: make
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Push to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: go-grpc-example
+        run: |
+          VERSION="$(bash .build/get_version.sh)"
+          docker build -t $REGISTRY/$REPOSITORY:$VERSION .
+          docker push $REGISTRY/$REPOSITORY:$VERSION
 
       - name: Retrieve version
         id: version
