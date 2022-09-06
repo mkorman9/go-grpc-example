@@ -47,6 +47,11 @@ jobs:
       - name: Build
         run: make
 
+      - name: Retrieve version
+        id: version
+        run: |
+          echo "::set-output name=TAG_NAME::$(bash .build/get_version.sh)')"
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -54,3 +59,5 @@ jobs:
             go-grpc-example
             LICENSE.txt
           draft: true
+          tag_name: ${{ steps.version.outputs.TAG_NAME }}
+          name: ${{ steps.version.outputs.TAG_NAME }}
