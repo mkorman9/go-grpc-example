@@ -23,6 +23,6 @@ if [[ "$branch_name" != "master" ]]; then
   version="${version}-${branch_name}"
 fi
 
-version="${version}-SNAPSHOT"
+version="${version}-nightly"
 
 echo "$version"
