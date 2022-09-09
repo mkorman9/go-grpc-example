@@ -4,9 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/mkorman9/go-commons/configutil"
-	"github.com/mkorman9/go-commons/eventbus"
+	"github.com/mkorman9/go-commons/coreutil"
 	"github.com/mkorman9/go-commons/grpcutil"
-	"github.com/mkorman9/go-commons/lifecycle"
 	"github.com/mkorman9/go-commons/logutil"
 	"github.com/mkorman9/go-grpc-example/protocol"
 	"github.com/rs/zerolog/log"
@@ -58,7 +57,7 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 		log.Info().Msg("Connection closed")
 	})
 
-	cancel := eventbus.Consume("server.events", func(msg *string, _ eventbus.CallContext) {
+	cancel := coreutil.Consume("server.events", func(msg *string, _ coreutil.CallContext) {
 		ds.Send(&protocol.ServerResponse{
 			Message: *msg,
 		})
@@ -84,7 +83,7 @@ func main() {
 	protocol.RegisterGreeterServer(server.Server, &GreeterService{})
 	protocol.RegisterGameServiceServer(server.Server, &GameService{})
 
-	lifecycle.StartAndBlock(server)
+	coreutil.StartAndBlock(server)
 }
 
 func runScheduledEvents() {
@@ -92,7 +91,7 @@ func runScheduledEvents() {
 		for {
 			scheduledEvent := "Scheduled event"
 
-			eventbus.Publish(
+			coreutil.Publish(
 				"server.events",
 				&scheduledEvent,
 			)
