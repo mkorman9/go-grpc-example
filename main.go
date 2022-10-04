@@ -74,12 +74,12 @@ func authFunction(token string, _ *grpcutil.CallMetadata) (*grpcutil.TokenVerifi
 }
 
 func main() {
-	configutil.LoadConfig()
-	logutil.SetupLogger()
+	config := configutil.LoadConfig()
+	logutil.SetupLogger(config)
 
 	runScheduledEvents()
 
-	server := grpcutil.NewServer(grpcutil.EnableAuthMiddlewareFunc(authFunction))
+	server := grpcutil.NewServer(config, grpcutil.EnableAuthMiddlewareFunc(authFunction))
 	protocol.RegisterGreeterServer(server.Server, &GreeterService{})
 	protocol.RegisterGameServiceServer(server.Server, &GameService{})
 
