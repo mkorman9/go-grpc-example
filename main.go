@@ -57,9 +57,9 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 		log.Info().Msg("Connection closed")
 	})
 
-	cancel := coreutil.Consume("server.events", func(msg *string, _ coreutil.CallContext) {
+	cancel := coreutil.Consume("server.events", func(msg string, _ coreutil.CallContext) {
 		ds.Send(&protocol.ServerResponse{
-			Message: *msg,
+			Message: msg,
 		})
 	})
 	defer cancel()
@@ -89,11 +89,9 @@ func main() {
 func runScheduledEvents() {
 	go func() {
 		for {
-			scheduledEvent := "Scheduled event"
-
 			coreutil.Publish(
 				"server.events",
-				&scheduledEvent,
+				"Scheduled event",
 			)
 
 			time.Sleep(5 * time.Second)
