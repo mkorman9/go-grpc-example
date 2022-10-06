@@ -24,64 +24,64 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           bash .build/release_patch.sh
 
-  build:
-    runs-on: ubuntu-latest
-    needs: release
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Setup Docker
-        uses: docker/setup-buildx-action@v1
-
-      - name: Install Protobuf compiler
-        run: sudo apt install -y protobuf-compiler
-
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.19
-
-      - name: Install protoc-gen-go
-        run: go install github.com/golang/protobuf/protoc-gen-go@latest
-
-      - name: Build
-        run: make
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-central-1
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Push to Amazon ECR
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: go-grpc-example
-        run: |
-          VERSION="$(bash .build/get_version.sh)"
-          docker build -t $REGISTRY/$REPOSITORY:$VERSION .
-          docker push $REGISTRY/$REPOSITORY:$VERSION
-
-      - name: Retrieve version
-        id: version
-        run: |
-          echo "::set-output name=TAG_NAME::$(bash .build/get_version.sh)"
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            go-grpc-example
-            LICENSE.txt
-          draft: true
-          tag_name: ${{ steps.version.outputs.TAG_NAME }}
-          name: ${{ steps.version.outputs.TAG_NAME }}
+#  build:
+#    runs-on: ubuntu-latest
+#    needs: release
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup Docker
+#        uses: docker/setup-buildx-action@v1
+#
+#      - name: Install Protobuf compiler
+#        run: sudo apt install -y protobuf-compiler
+#
+#      - name: Setup Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: 1.19
+#
+#      - name: Install protoc-gen-go
+#        run: go install github.com/golang/protobuf/protoc-gen-go@latest
+#
+#      - name: Build
+#        run: make
+#
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: eu-central-1
+#
+#      - name: Login to Amazon ECR
+#        id: login-ecr
+#        uses: aws-actions/amazon-ecr-login@v1
+#
+#      - name: Push to Amazon ECR
+#        env:
+#          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#          REPOSITORY: go-grpc-example
+#        run: |
+#          VERSION="$(bash .build/get_version.sh)"
+#          docker build -t $REGISTRY/$REPOSITORY:$VERSION .
+#          docker push $REGISTRY/$REPOSITORY:$VERSION
+#
+#      - name: Retrieve version
+#        id: version
+#        run: |
+#          echo "::set-output name=TAG_NAME::$(bash .build/get_version.sh)"
+#
+#      - name: Create Release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: |
+#            go-grpc-example
+#            LICENSE.txt
+#          draft: true
+#          tag_name: ${{ steps.version.outputs.TAG_NAME }}
+#          name: ${{ steps.version.outputs.TAG_NAME }}
