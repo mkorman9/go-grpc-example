@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/mkorman9/go-commons/configutil"
 	"github.com/mkorman9/go-commons/coreutil"
+	"github.com/mkorman9/go-commons/flyutil"
 	"github.com/mkorman9/go-commons/grpcutil"
 	"github.com/mkorman9/go-commons/logutil"
 	"github.com/mkorman9/go-grpc-example/protocol"
@@ -27,7 +28,10 @@ func (gs *GreeterService) SayHello(ctx context.Context, request *protocol.HelloR
 	}
 
 	response := &protocol.HelloReply{
-		Message: fmt.Sprintf("Hello %s from version %s", request.Name, AppVersion),
+		Message:     fmt.Sprintf("Hello %s from version %s", request.Name, AppVersion),
+		InCloud:     flyutil.RunningInCloud(),
+		Environment: coreutil.GetEnvironment(),
+		Region:      flyutil.Region(),
 	}
 
 	return response, nil

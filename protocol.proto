@@ -14,6 +14,9 @@ message HelloRequest {
 
 message HelloReply {
   string message = 1;
+  bool   inCloud = 2;
+  string environment = 3;
+  string region = 4;
 }
 
 service GameService {
