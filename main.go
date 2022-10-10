@@ -30,8 +30,7 @@ func (gs *GreeterService) SayHello(ctx context.Context, request *protocol.HelloR
 	response := &protocol.HelloReply{
 		Message:     fmt.Sprintf("Hello %s from version %s", request.Name, AppVersion),
 		InCloud:     flyutil.RunningInCloud(),
-		Environment: coreutil.GetEnvironment(),
-		Region:      flyutil.Region(),
+		Environment: flyutil.EnvironmentSlug(),
 	}
 
 	return response, nil
