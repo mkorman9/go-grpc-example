@@ -23,7 +23,7 @@ type GreeterService struct {
 }
 
 func (gs *GreeterService) SayHello(ctx context.Context, request *protocol.HelloRequest) (*protocol.HelloReply, error) {
-	if !grpcutil.GetTokenVerificationResult(ctx).IsAuthorized {
+	if !grpcutil.GetTokenVerificationResult[any](ctx).IsAuthorized {
 		return nil, status.Error(codes.Unauthenticated, "invalid token")
 	}
 
@@ -40,7 +40,7 @@ type GameService struct {
 }
 
 func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
-	if !grpcutil.GetTokenVerificationResult(stream.Context()).IsAuthorized {
+	if !grpcutil.GetTokenVerificationResult[any](stream.Context()).IsAuthorized {
 		return status.Error(codes.Unauthenticated, "invalid token")
 	}
 
@@ -70,8 +70,8 @@ func (gs *GameService) Play(stream protocol.GameService_PlayServer) error {
 	return ds.Start()
 }
 
-func authFunction(token string, _ *grpcutil.CallMetadata) (*grpcutil.TokenVerificationResult, error) {
-	return &grpcutil.TokenVerificationResult{
+func authFunction(token string, _ *grpcutil.CallMetadata) (*grpcutil.TokenVerificationResult[any], error) {
+	return &grpcutil.TokenVerificationResult[any]{
 		IsAuthorized: token == correctToken,
 	}, nil
 }
